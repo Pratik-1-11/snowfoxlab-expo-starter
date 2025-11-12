@@ -1,11 +1,11 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 
-export default function ProfileScreen() {
+export default function AboutScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Profile Screen</Text>
-      <Text>This is a intern profile screen where we can add our details.</Text>
+      <Text style={styles.title}>About Screen</Text>
+      <Text>Hi i'm pratik ,Mobile App intern in the Snowfoxlab </Text>
     </View>
   );
 }

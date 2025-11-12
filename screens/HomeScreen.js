@@ -10,7 +10,12 @@ export default function HomeScreen({ navigation }) {
         label="Go to Profile"
         onPress={() => navigation.navigate("Profile")}
       />
+       <Button 
+        label="Go to About"
+        onPress={() => navigation.navigate("About")}
+      />
     </View>
+    
   );
 }
 
