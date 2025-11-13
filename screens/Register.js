@@ -9,7 +9,9 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  StatusBar,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
 export default function Register() {
@@ -17,6 +19,7 @@ export default function Register() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleRegister = () => {
     if (!name || !email || !password) {
@@ -24,63 +27,87 @@ export default function Register() {
       return;
     }
 
-    Alert.alert('Registration Success!');
+    Alert.alert('✅ Registration Successful!');
     navigation.navigate('Home');
   };
 
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      style={{ flex: 1 }}
+      style={{ flex: 1, backgroundColor: '#fff' }}
     >
-      <ScrollView
-        contentContainerStyle={styles.scrollContainer}
-        keyboardShouldPersistTaps="handled"
-      >
-        {/* Header Section */}
+      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+      <ScrollView contentContainerStyle={styles.container}>
+        {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.headerText}>Create Account</Text>
-          <Text style={styles.subText}>Sign up to get started</Text>
+          <Text style={styles.title}>Create Account</Text>
+          <Text style={styles.subtitle}>Sign up to get started</Text>
         </View>
 
-        {/* Form Section */}
-        <View style={styles.formContainer}>
+        {/* Full Name */}
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Full Name</Text>
           <TextInput
             style={styles.input}
-            placeholder="Full Name"
+            placeholder="Enter your name"
             value={name}
             onChangeText={setName}
           />
+        </View>
 
+        {/* Email */}
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Email</Text>
           <TextInput
             style={styles.input}
-            placeholder="Email"
+            placeholder="example@gmail.com"
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
             autoCapitalize="none"
           />
+        </View>
 
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-          />
+        {/* Password */}
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Password</Text>
+          <View style={styles.passwordContainer}>
+            <TextInput
+              style={[styles.input, { flex: 1, marginBottom: 0 }]}
+              placeholder="Enter your password"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry={!showPassword}
+            />
+            <TouchableOpacity
+              onPress={() => setShowPassword(!showPassword)}
+              style={styles.eyeIcon}
+            >
+              <Ionicons
+                name={showPassword ? 'eye' : 'eye-off'}
+                size={20}
+                color="#999"
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
 
-          <TouchableOpacity style={styles.button} onPress={handleRegister}>
-            <Text style={styles.buttonText}>Register</Text>
-          </TouchableOpacity>
+        {/* Register Button */}
+        <TouchableOpacity style={styles.registerButton} onPress={handleRegister}>
+          <Text style={styles.registerButtonText}>Sign Up</Text>
+        </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={() => navigation.navigate('Login')}
-            style={{ marginTop: 20 }}
-          >
-            <Text style={styles.linkText}>
-              Already have an account? Login
+        {/* Footer Link */}
+        <View style={styles.footer}>
+          <Text style={styles.footerText}>
+            Already have an account?{' '}
+            <Text
+              style={styles.loginText}
+              onPress={() => navigation.navigate('Login')}
+            >
+              Sign In
             </Text>
-          </TouchableOpacity>
+          </Text>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -88,61 +115,79 @@ export default function Register() {
 }
 
 const styles = StyleSheet.create({
-  scrollContainer: {
+  container: {
     flexGrow: 1,
-    backgroundColor: '#f2f2f2',
-    paddingVertical: 50,
-    alignItems: 'center',
+    padding: 25,
+    backgroundColor: '#fff',
+    justifyContent: 'center',
   },
   header: {
-    marginBottom: 20,
     alignItems: 'center',
+    marginBottom: 30,
   },
-  headerText: {
-    fontSize: 28,
-    fontWeight: 'bold',
+  title: {
+    fontSize: 26,
+    fontWeight: '700',
     color: '#000',
   },
-  subText: {
-    fontSize: 16,
-    color: '#555',
-    marginTop: 5,
+  subtitle: {
+    fontSize: 14,
+    color: '#777',
+    marginTop: 6,
   },
-  formContainer: {
-    width: '85%',
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 25,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 5,
+  inputContainer: {
+    marginBottom: 20,
+  },
+  label: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#222',
+    marginBottom: 8,
   },
   input: {
-    width: '100%',
-    backgroundColor: '#f9f9f9',
-    padding: 14,
-    marginBottom: 15,
-    borderRadius: 8,
+    backgroundColor: '#FAFAFA',
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: '#E5E5E5',
+    borderRadius: 10,
+    padding: 12,
+    fontSize: 15,
+    color: '#000',
+    marginBottom: 5,
   },
-  button: {
-    width: '100%',
-    backgroundColor: '#007BFF',
-    padding: 15,
-    borderRadius: 8,
+  passwordContainer: {
+    flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 5,
+    borderWidth: 1,
+    borderColor: '#E5E5E5',
+    borderRadius: 10,
+    backgroundColor: '#FAFAFA',
+    paddingRight: 10,
   },
-  buttonText: {
+  eyeIcon: {
+    padding: 5,
+  },
+  registerButton: {
+    backgroundColor: '#EF693D',
+    paddingVertical: 14,
+    borderRadius: 25,
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  registerButtonText: {
     color: '#fff',
-    fontWeight: 'bold',
+    fontWeight: '700',
     fontSize: 16,
   },
-  linkText: {
-    color: '#007BFF',
+  footer: {
+    marginTop: 30,
+    alignItems: 'center',
+  },
+  footerText: {
+    color: '#444',
     fontSize: 14,
-    textAlign: 'center',
+  },
+  loginText: {
+    color: '#EF693D',
+    fontWeight: '600',
   },
 });
