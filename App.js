@@ -1,30 +1,73 @@
-import * as React from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import HomeScreen from "./screens/HomeScreen";
-import ProfileScreen from "./screens/ProfileScreen";
-import LoginScreen from "./screens/Login";
-import RegisterScreen from "./screens/Register";
-import AboutScreen from "./screens/AboutScreen";
+import { StatusBar } from 'expo-status-bar';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { View, Text } from 'react-native';
+import { Home, Settings, Bell } from 'lucide-react-native';
+import './global.css';
+import GalleryScreen from './screens/GalleryScreen';
+import NotificationsScreen from './screens/NotificationsScreen';
 
-const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
+
+function SettingsScreen() {
+  return (
+    <View className="flex-1 items-center justify-center bg-white">
+      <Text className="text-lg">Settings Screen</Text>
+    </View>
+  );
+}
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={{
-          headerStyle: { backgroundColor: "#ffffff" },
-          headerTitleStyle: { fontWeight: "bold", color: "#000" },
-        }}
-        initialRouteName="Login"
-      >
-        <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }}/>
-        <Stack.Screen name="Register" component={RegisterScreen} options={{headerShown: false}}/>
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="Profile" component={ProfileScreen} />
-        <Stack.Screen name="About" component={AboutScreen} />
-      </Stack.Navigator>
+      <SafeAreaProvider>
+        <Tab.Navigator
+          screenOptions={({ route }) => ({
+            tabBarIcon: ({ focused, color, size }) => {
+              if (route.name === 'Home') {
+                return <Home size={size} color={color} />;
+              } else if (route.name === 'Settings') {
+                return <Settings size={size} color={color} />;
+              } else if (route.name === 'Notifications') {
+                return <Bell size={size} color={color} />;
+              }
+            },
+            tabBarActiveTintColor: '#4f46e5',
+            tabBarInactiveTintColor: 'gray',
+            headerShown: false,
+            tabBarStyle: {
+              paddingTop: 8,
+              paddingBottom: 8,
+              height: 60,
+            },
+            tabBarLabelStyle: {
+              fontSize: 12,
+              marginBottom: 4,
+            },
+          })}
+        >
+          <Tab.Screen 
+            name="Home" 
+            component={GalleryScreen} 
+            options={{ title: 'Gallery' }}
+          />
+          <Tab.Screen 
+            name="Notifications" 
+            component={NotificationsScreen} 
+            options={{
+              title: 'Notifications',
+              tabBarBadge: 3, // Example badge
+            }}
+          />
+          <Tab.Screen 
+            name="Settings" 
+            component={SettingsScreen} 
+            options={{ title: 'Settings' }}
+          />
+        </Tab.Navigator>
+        <StatusBar style="auto" />
+      </SafeAreaProvider>
     </NavigationContainer>
   );
 }
